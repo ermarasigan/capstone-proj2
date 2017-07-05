@@ -70,11 +70,6 @@
   <!-- Sweet Alert JavaScript -->
   <script src="js/sweetalert.min.js"></script>
 
-  <!-- Javascript to process Add/remove cart and Checkout -->
-  <script src="js/checkout.js"></script>
-
-
-
 
 </body>
 </html>

@@ -9,12 +9,14 @@
     $stmt=mysqli_stmt_init($conn);
 
     $sql = "SELECT * FROM songs 
-        WHERE match(`title`,`artist`) against (? in boolean mode)
+        WHERE match(`title`,`artist`) against (?)
+        or `artist` like ?
+        or `title` like ?
         ";
 
     if(mysqli_stmt_prepare($stmt,$sql)){
 
-    	mysqli_stmt_bind_param($stmt,'s',$searchparm);
+    	mysqli_stmt_bind_param($stmt,'sss',$searchparm,$searchparm,$searchparm);
     	mysqli_stmt_execute($stmt);
 
     	mysqli_stmt_store_result($stmt);
