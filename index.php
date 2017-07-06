@@ -19,9 +19,9 @@
 			  <h2 id="welcometext"> 
           Play the Ukulele <br> Karaoke Style! 
         </h2>
-        <form id="searchform" method="post" action="">
+        <form id="searchform" method="POST" action="">
           <input id="search" type="text" name="find" placeholder="Type title or artist" >
-          <a id="searchbtn" type="submit" class="btn btn-default btn-lg page-scroll" href="#">
+          <a id="searchbtn" class="btn btn-default btn-lg page-scroll" href="#">
             Find
           </a>
         </form>

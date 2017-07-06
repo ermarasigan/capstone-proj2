@@ -6,7 +6,8 @@ body {
 /*Styling for header*/
 
 
-#search {
+#search,
+#searchtabs {
     width: 60%;
     color: white;
     box-sizing: border-box;
@@ -23,14 +24,16 @@ body {
     transition: width 0.4s ease-in-out;
 }
 
-#search:focus {
+#search:focus,
+#searchtabs:focus {
     width: 70%;
     outline-color: orange;
     border-radius: 5px;
 }
 
 
-#search::placeholder {
+#search::placeholder,
+#searchtabs::placeholder {
     color: white;
     opacity: 1;
     text-shadow: 1px 1px grey;
@@ -124,11 +127,12 @@ h6 {
 
 /*Welcome box formatting*/
 #welcomebg {
+	height: 100%;
 	width: 100%;
 	background: linear-gradient(rgba(308, 162, 14, 0.3),rgba(308, 162, 14, 0.3)),
 				rgba(308, 162, 14, 0.3) 
 	/*background:*/
-				url("../img/background/ukulele.jpg") 
+				url("../img/background/ukulele.png") 
 				fixed                      /*parallax*/
 				no-repeat ;
 	/*background-image: url("../img/background/salad_person.jpg");*/
@@ -146,28 +150,67 @@ h6 {
 	text-align: center;
 }
 /*specify aspect ratio h/w*/
-#welcomebg:before {
+/*#welcomebg:before {
 	content: "";
 	float: left;
 	padding-bottom: 50%;
 	clear: both;
-}
+}*/
 /*this is a clearfix. */
-#welcomebg:after {
+/*#welcomebg:after {
     content: "";
     display: table;
     clear: both;
-}
+}*/
 
-.clear:before {
+/*.clear:before {
     content: "";
     display: block;
     clear: both;
 }
 
+*/
+
+#addsongbg {
+	height: 100%;
+	width: 100%;
+	background: linear-gradient(rgba(308, 162, 14, 0.3),rgba(308, 162, 14, 0.3)),
+				rgba(308, 162, 14, 0.3) 
+	/*background:*/
+				url("../img/background/ukulele.jpg") 
+				fixed                      /*parallax*/
+				no-repeat ;
+	/*background-image: url("../img/background/salad_person.jpg");*/
+	opacity: 0.8;
+	background-size: cover;
+	background-repeat: no-repeat;
+	position: relative;
+}
+
+#addsongbg > div {
+	position: absolute;
+	top: 35%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	text-align: center;
+}
+/*specify aspect ratio h/w*/
+/*#addsongbg:before {
+	content: "";
+	float: left;
+	padding-bottom: 50%;
+	clear: both;
+}*/
+/*this is a clearfix. */
+/*#addsongbg:after {
+    content: "";
+    display: table;
+    clear: both;
+}*/
+
 /*format for bigger screens */
 @media screen and (min-width: 768px) {
-/*	#welcomebg {
+/*	#addsongbg {
 	background-image: url("../img/background/chicken_bg_480.gif");
 	}*/
 	
@@ -370,4 +413,33 @@ a:hover {
 .icons-footer {
 	font-size: 40px;
 	margin-top: 40px;
+}
+
+canvas {
+	position: absolute;
+	bottom: 10%;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.about-section{
+	padding-top: 100px;
+}
+
+#addsongbg #textarea {
+	width: 100%;
+	font-family: sans-serif; 
+	font-size: 15px;
+}
+
+#addsongbg button,
+#addsongbg input {
+	margin: 5px 10px 10px; 
+	width: 75px;
+}
+
+#addsongbg input{
+	height: 40px;
+	border-radius: 5px;
+	padding-top: -10px;
 }

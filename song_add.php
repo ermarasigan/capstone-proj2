@@ -3,7 +3,7 @@
 
   function get_title() {
   	global $title;
-  	$title='Menu page - add item';
+  	$title='Add song (admin only)';
   	echo $title;
   }
 ?>
@@ -12,7 +12,7 @@
 <?php require_once "partials/_header.php"; ?>
 
 <!-- Main Section -->
-<main class="container-fluid" id="welcomebox">
+<!-- <main class="container-fluid" id="welcomebox">
 	<div class="row">
 		<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
 			<h1> Everyone loves to eat </h1>
@@ -49,6 +49,60 @@
 		</div>
 	</div>
 </main>
+ -->
+<!-- Main Section -->
+<main class="container-fluid" id="addsongbg">
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+			<textarea id="textarea" rows="8" cols="60" placeholder="Type chords and lyrics in alternate lines" required="required"></textarea>
+		</div>
+		
+
+		
+		<input id="bpm" class="text-center" type="number" min=0 placeholder="BPM">
+		<button type="button" class='btn btn-default btn-info' onclick="previewLyrics()">Preview</button><br>
+
+		<button id='togglebtn' class='btn btn-default btn-default' type='submit' onclick='toggleLyrics();'>Play</button>
+		<button id='savebtn' class='btn btn-default btn-success' type='submit' onclick='saveSong();'>Save</button>
+		
+
+		<!-- <uke-chord frets='0020' size='L'  position=0 name='A'  style='background: white; padding-right: 20px; margin: 10px;'></uke-chord> -->
+	</div>
+	<!-- <div class="row">
+		<div class="col-lg-12" id="canvas-container">
+			<canvas id="draw-pad" width="700" height="200">
+			</canvas>
+		</div>
+	</div> -->
+	<canvas id="draw-pad" width="700" height="120">
+	</canvas>
+</main>
+
+<!-- About Section -->
+<section id="about" class="about-section">
+  <div class="container">
+    <div class="row">
+    	<div class="text-center">
+    		<h2>Look up Chords</h2>
+    	</div>
+    	<br>
+    	<div class="col-lg-6 col-lg-offset-3">
+		    <form action="#about" method="post">
+				<input id="searchtabs" type="text" name="chord" placeholder="Type chords separated by spaces">
+				<button type="submit" class="btn btn-default btn-lg" name="convert">
+					Get chord tabs
+				</button>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<br>
+		<?php 
+			convertChords()
+		?>
+	</div>
+  </div>
+</section>
 
 <!-- Footer Partial (including javascript) -->
 <?php require_once "partials/_footer.php"; ?>

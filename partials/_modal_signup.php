@@ -24,17 +24,57 @@
 
             <div class="form-group">
               <label for="reguser">Username:</label>
-              <input type="text" class="form-control" id="reguser" name="reguser">
+              <?php
+                echo '<input type="text" class="form-control" id="reguser" name="reguser"';
+                if (isset($_POST['reguser'])){
+                  echo "value='" . $_POST['reguser'] . "'";
+                }
+                echo '>';
+              ?>
             </div>
 
             <div class="form-group">
               <label for="regpswd1">Password:</label>
-              <input type="password" class="form-control" id="regpswd1" name="regpswd1">
+              <?php
+                echo '<input type="password" class="form-control" id="regpswd1" name="regpswd1"';
+                if (isset($_POST['regpswd1'])){
+                  echo "value='" . $_POST['regpswd1'] . "'";
+                }
+                echo '>';
+              ?>
             </div>
 
             <div class="form-group">
               <label for="regpswd2">Confirm Password:</label>
-              <input type="password" class="form-control" id="regpswd2" name="regpswd2">
+              <?php
+                echo '<input type="password" class="form-control" id="regpswd2" name="regpswd2"';
+                if (isset($_POST['regpswd2'])){
+                  echo "value='" . $_POST['regpswd2'] . "'";
+                }
+                echo '>';
+              ?>
+            </div>
+
+            <div class="form-group">
+              <label for="regemail">Email:</label>
+              <?php
+                echo '<input type="email" class="form-control" id="regemail" name="regemail"';
+                if (isset($_POST['regemail'])){
+                  echo "value='" . $_POST['regemail'] . "'";
+                }
+                echo '>';
+              ?>
+            </div>
+
+            <div class="form-group">
+              <label for="regbirth">Birthdate:</label>
+              <?php
+                echo '<input type="date" class="form-control" id="regbirth" name="regbirth"';
+                if (isset($_POST['regbirth'])){
+                  echo "value='" . $_POST['regbirth'] . "'";
+                }
+                echo '>';
+              ?>
             </div>
 
             <div class="form-group">

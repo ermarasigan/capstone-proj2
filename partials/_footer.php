@@ -35,16 +35,16 @@
             </div>
             <div class="row text-center">
               <br class="small">
-              <p class="col-lg-4 text-center text-muted">&copy; Pianosnake Uke Chords</p>
-              <p class="col-lg-4 text-center text-muted">Copyright &copy; Karauke 2017</p>
+              <p class="col-lg-4 text-center text-muted">&copy; Uke Chords by Pianosnake </p>
+              <p class="col-lg-4 text-center text-muted">&copy; Karauke 2017 All Rights Reserved</p>
               <p class="col-lg-4 text-center text-muted">&copy; Elegantthemes Icon Fonts</p>
-              
+            </div>
+            <div class="row text-center">
+              <p class="col-lg-4 text-center text-muted">&copy; SweetAlert by Tristan Edwards</p>
+              <p class="col-lg-4 col-lg-offset-4 text-center text-muted">&copy; Easing plugin by Robert Penner</p>
             </div>
         </div>
     </footer>
-
-
-
 
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -70,6 +70,12 @@
   <!-- Sweet Alert JavaScript -->
   <script src="js/sweetalert.min.js"></script>
 
+  <!-- Javascript for karaoke text -->
+  <?php
+    if($title!='Home page') {
+      echo '<script src="js/karaoke.js"></script>';
+    }
+  ?>
 
 </body>
 </html>

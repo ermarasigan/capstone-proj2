@@ -10,8 +10,8 @@
 
     $sql = "SELECT * FROM songs 
         WHERE match(`title`,`artist`) against (?)
-        or `artist` like ?
-        or `title` like ?
+        or `artist` like CONCAT(?,'%')
+        or `title` like CONCAT(?,'%')
         ";
 
     if(mysqli_stmt_prepare($stmt,$sql)){

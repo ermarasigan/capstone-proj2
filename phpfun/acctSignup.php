@@ -28,6 +28,9 @@
     $reguser = $_POST['reguser'];
     $regpswd1 = $_POST['regpswd1'];
     $regpswd2 = $_POST['regpswd2'];
+    $regemail = $_POST['regemail'];
+    $regbirth = $_POST['regbirth'];
+
 
     // Check if supplied username is blank
     if ($reguser == ''){
@@ -56,6 +59,24 @@
     // Check if supplied passwords are same
     if ($regpswd1!=$regpswd2) {
       $output .= "Passwords should be the same";
+      return $output;
+    }
+
+    // Check if supplied email is blank
+    if ($regemail == ''){
+      $output .= "Email is required";
+      return $output;
+    }
+
+    // Check if supplied email is valid
+    if (!filter_var($regemail, FILTER_VALIDATE_EMAIL)) {
+      $output .= "Invalid email format";
+      return $output;
+    }
+
+    // Check if supplied birthdate is blank
+    if ($regbirth == ''){
+      $output .= "Birthdate is required";
       return $output;
     }
 
