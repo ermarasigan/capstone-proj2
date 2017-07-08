@@ -63,12 +63,17 @@
   <!-- Scroll Reveal JavaScript -->
   <script src="js/scrollreveal.min.js"></script>
 
-  <!-- Scrolling Nav JavaScript -->
+  <!-- Scroll Easing JavaScript -->
   <script src="js/jquery.easing.min.js"></script>
+
+  <!-- Search and Ease JavaScript -->
   <script src="js/scrolling-nav.js"></script>
 
   <!-- Sweet Alert JavaScript -->
   <script src="js/sweetalert.min.js"></script>
+
+  <!-- Ajax Functions -->
+  <script src="js/ajaxFunctions.js"></script>
 
   <!-- Javascript for karaoke text -->
   <?php

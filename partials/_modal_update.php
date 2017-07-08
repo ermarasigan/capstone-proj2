@@ -65,43 +65,20 @@
                         Password updated
                       </div>';
               }
-              // if ($signup_status=="signup_success") {
-              //   echo '<div class="alert alert-success">';
-              //   echo $output;
-              //   echo '</div>';
-              //   echo '<button type="button" class="btn btn-primary btn-block"'; 
-              //   echo 'data-toggle="modal" data-dismiss="modal" data-target="#login_modal">';
-              //   echo 'Log In';
-              //   echo '</button>';
-              // }
             ?>
 
             <hr>
 
-            <div class="form-group">
-              <label for="delpswd">Password:</label>
-              <input type="password" class="form-control" id="delpswd" name="delpswd">
-            </div>
-
-            <div class="form-group">
-              <button type="submit" name="delete"  class="btn btn-danger btn-block">
-                Delete Account
-              </button>
-            </div>
-            <?php
-              if ($delete_status=="pswd_invalid") {
-                echo '<div class="alert alert-danger">
-                        Password is incorrect
-                      </div>'; 
-              }
-              if ($delete_status=="delete_success") {
-                echo '<div class="alert alert-success">
-                        Account successfully deleted
-                      </div>'; 
-              }
-            ?>
-
           </form>
+
+          <div class="form-group">
+            <label for="delpswd">Password:</label>
+            <input type="password" class="form-control" id="delpswd" name="delpswd">
+          </div>
+
+          <button type="submit" name="delete"  class="btn btn-danger btn-block" onclick="acctDelete()">
+                Delete Account
+          </button>
         </div>
 
         <!-- Modal Footer-->

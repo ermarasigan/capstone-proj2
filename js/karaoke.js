@@ -4,9 +4,11 @@
 $(document).ready(function() {
   $("#togglebtn").hide();
   $("#savebtn").hide();
+  $("#stopbtn").hide();
   $("#draw-pad").width($(window).width()-30);
 });
 
+// Responsive canvas size
 $(document).ready(function() {
   $(window).resize(function(){
     $("#draw-pad").width($(window).width()-30);
@@ -14,53 +16,7 @@ $(document).ready(function() {
 });
 
 
-chords=[];
-lyrics=[];
-
-function previewLyrics() {
-    var lines = [];
-    chords=[];
-	lyrics=[];
-	bpm=$('#songbpm').val();
-    
-    var ctr=0;
-    $.each($('#textarea').val().split(/\n/), function (i, line) {
-    	console.log(ctr);
-        if(ctr%2==0){
-            chords.push(line);
-        } else {
-        	lyrics.push(line);
-        }
-        ctr++;
-    });
-    console.log(chords);
-    console.log(lyrics);
-    console.log($('#songbpm').val());
-
-    if(chords>''&&lyrics>''&& bpm>0){
-    	$("#togglebtn").show();
-    	$("#togglebtn").focus();
-    	$("#savebtn").show();
-    } else {
-    	$("#togglebtn").hide();
-      $("#savebtn").hide();
-    }
-
-    if(lyrics=='' || chords==''){
-    	swal ("Lyrics and chords are required")
-    	return
-    }
-    if(bpm==''){
-    	swal ("BPM is required")
-    	return
-    }
-
-}
-
-
-function saveSong() {
-
-}
+// SAMPLE INPUT
 // D       F#m          Bm
 // Wise  men  say,  only  
 // G     D      A      G
@@ -69,6 +25,109 @@ function saveSong() {
 // I  can't  help  falling in
 // D      A      D
 // love  with  you
+
+// Preview requires chords, lyrics and BPM
+function previewLyrics() {
+  var lines = [];
+  chords=[];
+	lyrics=[];
+	bpm=$('#songbpm').val();
+    
+  var ctr=0;
+  $.each($('#textarea').val().split(/\n/), function (i, line) {
+    if(ctr%2==0){
+        chords.push(line);
+    } else {
+    	lyrics.push(line);
+    }
+    ctr++;
+  });
+
+  if(chords>''&&lyrics>''&& bpm>0){
+  	$("#togglebtn").show();
+  	$("#togglebtn").focus();
+  	$("#savebtn").show();
+  } else {
+  	$("#togglebtn").hide();
+    $("#savebtn").hide();
+     $("#stopbtn").hide();
+  }
+
+  if(lyrics=='' || chords==''){
+    $('#textarea').focus()
+  	swal ("Lyrics and chords are required")
+  	return
+  }
+
+  if(bpm==''){
+    $('#songbpm').focus()
+  	swal ("Beats Per Minute is required")
+  	return
+  }
+}
+
+// Get song details and save to database
+function saveSong() {
+  previewLyrics()
+
+  var title =$('#songtitle') .val();
+  var artist=$('#songartist').val();
+  var year  =$('#songyear')  .val();
+
+  if(title==''){
+    $('#songtitle').focus()
+    swal ("Song Title is required")
+    return
+  }
+
+  if(artist==''){
+    $('#songartist').focus()
+    swal ("Song Artist is required")
+    return
+  }
+
+  if(year==''){
+    $('#songyear').focus()
+    swal ("Song Year is required")
+    return
+  } else {
+    var dt = new Date();
+    var yearNow = 1900 + dt.getYear();
+
+    if(year > yearNow){
+      $('#songyear').focus()
+      swal ("Please enter a valid year")
+      return
+    } else{
+
+      swal({
+        title: "New Song",
+        text: "Submit to save to database",
+        type: "info",
+        showCancelButton: true,
+        closeOnConfirm: false,
+        showLoaderOnConfirm: true,
+      },
+      function(){
+        $.post(){
+          
+        }
+
+        setTimeout(function(){
+          swal({
+            title:"Success",
+            text:"New song added!",
+            type: "success"
+          },function(isConfirm){
+            if(isConfirm){
+              location.reload();
+            }
+          });
+        }, 2000);
+      });
+    }
+  }
+}
 
 
 // shim layer with setTimeout fallback
@@ -92,7 +151,7 @@ var clearY = 0;
 var clearX = 0;
 
 // Set fontface for text
-context.font = 'bold 40px sans-serif';
+context.font = 'bold 30px sans-serif';
 // textAlign aligns text horizontally relative to placement
 context.textAlign = 'center';
 // textBaseline aligns text vertically relative to font style
@@ -160,12 +219,14 @@ function runText() {
 	} else {
 		var toggle = document.getElementById('togglebtn');
 		toggle.innerHTML = 'Restart';
+    $("#stopbtn").hide();
 	}
 }
 
 // Function to pause animation
 function stopText(){
 	cancelAnimationFrame(globalID);
+  globalID=0;
 }
 
 // Function to control play/pause/resume/restart
@@ -178,12 +239,14 @@ function toggleLyrics() {
         txt=lyrics[l];
         runText();
         toggle.innerHTML = 'Pause'; 
+        $("#stopbtn").show();
         break;
 	    case 'Resume':
 	    	resume='yes';
 	    	txt=lyrics[l];
 	      runText();
 			  toggle.innerHTML = 'Pause'; 
+        $("#stopbtn").show();
 	      break;
 	    case 'Pause':
 	        stopText();
@@ -195,9 +258,22 @@ function toggleLyrics() {
 	    	txt=lyrics[l];
 	    	runText();
 	    	toggle.innerHTML = 'Pause'; 
+        $("#stopbtn").show();
+        break;
 	    default:
-	        break;
+	     break;
 	}
+}
+
+// Stop animation and reset lyrics
+function stopSong(){
+  var toggle = document.getElementById('togglebtn');
+  toggle.innerHTML = 'Restart';
+  l=0;
+  w=0;
+  cancelAnimationFrame(globalID);
+  context.clearRect(clearX, clearY, canvas.width, clearH);
+  $("#stopbtn").hide();
 }
 
 // Step function with callback

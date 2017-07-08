@@ -4,7 +4,6 @@
 <?php require_once "phpfun/acctSignup.php"; ?>
 <?php require_once "phpfun/acctLogout.php" ?>
 <?php require_once "phpfun/acctUpdate.php" ?>
-<?php require_once "phpfun/acctDelete.php" ?>
 <?php require_once "phpfun/songAdd.php" ?>
 <?php require_once "phpfun/songDelete.php" ?>
 <?php require_once "phpfun/songShow.php"; ?>

@@ -17,7 +17,14 @@
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
 			<div id="whiteborder">
 			  <h2 id="welcometext"> 
-          Play the Ukulele <br> Karaoke Style! 
+
+          <?php
+            if(!isset($_SESSION['username'])){
+              echo "Play the Ukulele <br> Karaoke Style!"; 
+            } else {
+              echo "Welcome back <br>" . $_SESSION['username']. "!"; 
+            }
+          ?>
         </h2>
         <form id="searchform" method="POST" action="">
           <input id="search" type="text" name="find" placeholder="Type title or artist" >

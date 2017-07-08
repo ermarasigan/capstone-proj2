@@ -55,42 +55,42 @@
 	<div class="row">
 
 		<h2 class="text-center">Add Song</h2>
-		<br>
 	</div>
 	<div class="row">
 
 
-		<div class="col-lg-4">
+		<div class="col-md-4 col-lg-4">
 			<div class="form-group">
               <input type="text" class="form-control" id="songtitle" name="songtitle" placeholder="Song Title">
-              <br>
+              <label for="songartist"></label>
               <input type="text" class="form-control" id="songartist" name="songartist" placeholder="Song Artist">
-              <br>
               <div class="row">
               	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-		              <input id="songyear" class="form-control" type="year" placeholder="Song Year">
-		              <br>
+              			<label for="songyear"></label>
+		            	<input id="songyear" class="form-control" type="number" min=1900 placeholder="Song Year">
 		        </div>
 		        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-		              <input id="songbpm" class="form-control" type="number" min=0 placeholder="Beats Per Minute">
-		       </div>
+		        		<label for="songbpm"></label>
+		            	<input id="songbpm" class="form-control" type="number" min=0 placeholder="Beats Per Minute">
+		       	</div>
 		      </div>
             </div>
          </div>
 
 
 		<!-- <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8"> -->
-		<div class="col-lg-6">
+		<div class="col-md-6 col-lg-6">
 			<textarea id="textarea" rows="8" cols="30" placeholder="Type chords and lyrics in alternate lines" required="required"></textarea>
 		</div>
 		
 
 
 		
-		<div class="col-lg-2 text-center">
+		<div class="col-md-2 col-lg-2 text-center">
 			<button type="button" class='btn btn-default btn-info' onclick="previewLyrics()">Preview</button>
 			<button id='togglebtn' class='btn btn-default btn-default' type='submit' onclick='toggleLyrics();'>Play</button>
 			<button id='savebtn' class='btn btn-default btn-success' type='submit' onclick='saveSong();'>Save</button>
+			<button id='stopbtn' class='btn btn-default btn-default' type='submit' onclick='stopSong();'>Stop</button>
 		</div>
 			
 
