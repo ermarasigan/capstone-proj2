@@ -36,12 +36,13 @@
             <div class="row text-center">
               <br class="small">
               <p class="col-lg-4 text-center text-muted">&copy; Uke Chords by Pianosnake </p>
-              <p class="col-lg-4 text-center text-muted">&copy; Karauke 2017 All Rights Reserved</p>
+              <p class="col-lg-4 text-center text-muted">&copy; Freepik Free Stock Photos</p>
               <p class="col-lg-4 text-center text-muted">&copy; Elegantthemes Icon Fonts</p>
             </div>
             <div class="row text-center">
               <p class="col-lg-4 text-center text-muted">&copy; SweetAlert by Tristan Edwards</p>
-              <p class="col-lg-4 col-lg-offset-4 text-center text-muted">&copy; Easing plugin by Robert Penner</p>
+              <p class="col-lg-4 text-center text-muted">&copy; Karauke 2017 All Rights Reserved</p>
+              <p class="col-lg-4 text-center text-muted">&copy; Easing plugin by Robert Penner</p>
             </div>
         </div>
     </footer>
@@ -72,13 +73,19 @@
   <!-- Sweet Alert JavaScript -->
   <script src="js/sweetalert.min.js"></script>
 
-  <!-- Ajax Functions -->
-  <script src="js/ajaxFunctions.js"></script>
+  <!-- Ajax Function to delete account -->
+  <script src="js/acctDelete.js"></script>
+
+  <!-- Ajax Functions for song options (play, delete, pick) -->
+  <script src="js/songOpts.js"></script>
 
   <!-- Javascript for karaoke text -->
   <?php
-    if($title!='Home page') {
-      echo '<script src="js/karaoke.js"></script>';
+    if($title=='Add song') {
+      echo '<script src="js/songAdd.js"></script>';
+    }
+    if($title=='Play song') {
+      echo '<script src="js/songPlay.js"></script>';
     }
   ?>
 

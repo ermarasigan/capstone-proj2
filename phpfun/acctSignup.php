@@ -80,9 +80,16 @@
       return $output;
     }
 
+    // Must be at least 5 years old
+    $birthdate = strtotime($regbirth);
+    $minimum = strtotime('+5 years', $birthdate);
+    if(time() < $minimum)  {
+      $output .= "Must be at least 5 years old";
+      return $output;
+    }
+
     // Encrypt password
     $regpswd1 = sha1($regpswd1);
-
 
     // Prepared statements
     $stmt=mysqli_stmt_init($conn);

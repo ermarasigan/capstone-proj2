@@ -1,3 +1,14 @@
+
+// SAMPLE INPUT
+// D       F#m          Bm
+// Wise  men  say,  only  
+// G     D      A      G
+// fools rush  in,  but
+// A        Bm      G
+// I  can't  help  falling in
+// D      A      D
+// love  with  you
+
 // Javascript for generating karaoke text
 
 // Initial state
@@ -15,32 +26,50 @@ $(document).ready(function() {
   })
 });
 
+// Get selected text from input
+function getText(elem) {
+    if(elem.tagName === "TEXTAREA" ||
+       (elem.tagName === "INPUT" && elem.type === "text")) {
+        return elem.value.substring(elem.selectionStart,
+                                    elem.selectionEnd);
+    }
+    return null;
+}
 
-// SAMPLE INPUT
-// D       F#m          Bm
-// Wise  men  say,  only  
-// G     D      A      G
-// fools rush  in,  but
-// A        Bm      G
-// I  can't  help  falling in
-// D      A      D
-// love  with  you
+// Save selected text on focus of textarea
+$(function() {
+    var timerId = 0;
+
+    $(document).on('focus', '#textarea', function(event) {
+        selected=''
+        timerId = setInterval(function() {
+                    selected = getText(document.activeElement);
+                  }, 100);
+    });
+
+    $(document).on('blur', '#textarea', function(event) {
+        clearInterval(timerId);
+    });
+});
 
 // Preview requires chords, lyrics and BPM
 function previewLyrics() {
-  var lines = [];
   chords=[];
 	lyrics=[];
 	bpm=$('#songbpm').val();
-    
-  var ctr=0;
-  $.each($('#textarea').val().split(/\n/), function (i, line) {
-    if(ctr%2==0){
-        chords.push(line);
+
+  if(selected==''){
+    previewLines=$('#textarea').val()
+  } else{
+    previewLines=selected
+  }
+
+  $.each(previewLines.split(/\n/), function (i, line) {
+    if(i%2==0){
+      chords.push(line);
     } else {
     	lyrics.push(line);
     }
-    ctr++;
   });
 
   if(chords>''&&lyrics>''&& bpm>0){
@@ -55,7 +84,7 @@ function previewLyrics() {
 
   if(lyrics=='' || chords==''){
     $('#textarea').focus()
-  	swal ("Lyrics and chords are required")
+  	swal ("Chords and lyrics are required")
   	return
   }
 
@@ -68,24 +97,41 @@ function previewLyrics() {
 
 // Get song details and save to database
 function saveSong() {
-  previewLyrics()
 
-  var title =$('#songtitle') .val();
-  var artist=$('#songartist').val();
-  var year  =$('#songyear')  .val();
+  selected='';
+  previewLyrics();
 
+  title =$('#songtitle') .val();
+  artist=$('#songartist').val();
+  year  =$('#songyear')  .val();
+
+  // Song Title is required
   if(title==''){
     $('#songtitle').focus()
     swal ("Song Title is required")
     return
   }
 
+  // Song Artist is required
   if(artist==''){
     $('#songartist').focus()
     swal ("Song Artist is required")
     return
   }
 
+  if(lyrics=='' || chords==''){
+    $('#textarea').focus()
+    swal ("Chords and lyrics are required")
+    return
+  }
+
+  if(bpm==''){
+    $('#songbpm').focus()
+    swal ("Beats Per Minute is required")
+    return
+  }
+
+  // Year must not be in the future
   if(year==''){
     $('#songyear').focus()
     swal ("Song Year is required")
@@ -98,37 +144,119 @@ function saveSong() {
       $('#songyear').focus()
       swal ("Please enter a valid year")
       return
-    } else{
-
-      swal({
-        title: "New Song",
-        text: "Submit to save to database",
-        type: "info",
-        showCancelButton: true,
-        closeOnConfirm: false,
-        showLoaderOnConfirm: true,
-      },
-      function(){
-        $.post(){
-          
-        }
-
-        setTimeout(function(){
-          swal({
-            title:"Success",
-            text:"New song added!",
-            type: "success"
-          },function(isConfirm){
-            if(isConfirm){
-              location.reload();
-            }
-          });
-        }, 2000);
-      });
     }
-  }
+  } 
+
+  // Ajax function to check if song exists
+  $.post("ajax/songExists.php",
+  {
+    title   : title,
+    artist  : artist,
+    year    : year
+  },
+  function(data,status){
+    if(data=='songexists'){
+      songOverride();
+    } else {
+      songAdd();
+    }
+  });
 }
 
+// Override song if it exists
+function songOverride(){
+  swal(
+  {
+    title: "Override existing song?" ,
+    text: title + " - " + artist + " (" + year + ")",
+    type: "warning",
+    showCancelButton: true,
+    closeOnConfirm: false,
+    showLoaderOnConfirm: true,
+  },
+  function(isConfirm){
+    if(isConfirm) {
+      $.post("ajax/songOverride.php",
+      {
+        chords  : chords,
+        lyrics  : lyrics,
+        bpm     : bpm
+      },
+      function(data,status){
+        if(data=='success'){
+          setTimeout(function(){
+            swal({
+              title:"Song updated!",
+              text: title + " - " + artist + " (" + year + ")",
+              type: "success"
+            },function(isConfirm){
+              if(isConfirm){
+                location.reload();
+              }
+            });
+          }, 1000);
+        } else {
+          setTimeout(function(){
+            swal({
+              title:"Database issue, contact admin",
+              text: "Song not updated (" + data + ")",
+              type: "error"
+            });
+          }, 1000);
+        }
+      });
+    }
+  });
+}
+
+// Add new song
+function songAdd(){
+  swal(
+  {
+    title: "New Song",
+    text: "Submit to save to database",
+    type: "info",
+    showCancelButton: true,
+    closeOnConfirm: false,
+    showLoaderOnConfirm: true,
+  },
+  function(isConfirm){
+    if(isConfirm) {
+      $.post("ajax/songAdd.php",
+      {    
+        chords  : chords,
+        lyrics  : lyrics,
+        bpm     : bpm,
+        title   : title,
+        artist  : artist,
+        year    : year
+      },
+      function(data,status){
+        if(data=='success'){
+          setTimeout(function(){
+            swal({
+              title: "Song added!",
+              text: title + " - " + artist + " (" + year + ")",
+              type: "success"
+            },function(isConfirm){
+              if(isConfirm){
+                location.reload();
+              }
+            });
+          }, 1000);
+        } else {
+          setTimeout(function(){
+            swal({
+              title:"Database issue, contact admin",
+              text: "Song not added (" + data + ")",
+              type: "error"
+            });
+          }, 1000);      
+        }
+      });
+    }
+  });
+}
 
 // shim layer with setTimeout fallback
 window.requestAnimFrame = (function(){
@@ -151,7 +279,7 @@ var clearY = 0;
 var clearX = 0;
 
 // Set fontface for text
-context.font = 'bold 30px sans-serif';
+context.font = 'bold 25px sans-serif';
 // textAlign aligns text horizontally relative to placement
 context.textAlign = 'center';
 // textBaseline aligns text vertically relative to font style
@@ -173,7 +301,7 @@ function runText() {
 
   // Reset text width when end of line is reached
   if (w>=(1+2/bpm)*textwidth){
-    context.clearRect(clearX, clearY, 2*w, clearH);
+    context.clearRect(0, clearY, canvas.width, clearH);
     l++;
     if(l<lyrics.length){
     	txt=lyrics[l];

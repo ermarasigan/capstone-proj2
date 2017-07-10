@@ -1,5 +1,6 @@
 <?php
 
+    session_start();
 	require_once "../phpfun/connectDB.php";
 
 	$searchparm = $_POST['searchparm'];
@@ -34,6 +35,11 @@
 
     // Write to json file
     $filename = "../json/search.json";
+    if(isset($_SESSION['username'])){
+      $filename = "../json/searches/" . htmlspecialchars(strtolower($_SESSION['username'])) . "_search.json";
+    } else {
+      $filename = "../json/searches/search.json";
+    }
 
     $fp = fopen($filename,'w');
     fwrite($fp, json_encode($array,JSON_PRETTY_PRINT));

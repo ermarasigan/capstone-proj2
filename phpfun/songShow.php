@@ -1,131 +1,225 @@
 <?php
-	
-	function showmenu($action) {
 
-		global $conn;
+  function searchShow(){
 
-		$sql = "SELECT id, name, price FROM menu
-					where date = current_date";
+    $array = [];
 
-			$result = mysqli_query($conn, $sql);
-			if(mysqli_num_rows($result) > 0) {
-				while($row = mysqli_fetch_assoc($result)) {
-					extract($row);
-			    	
-					// Edit and delete buttons
-					if(!isset($_SESSION['role'])) { 
-						$_SESSION['role'] = '';
-					}
-			
-					if($_SESSION['role']=='admin'){
-				    	$buttons = 
-				    		"<div class='form-group'>
-				    			<a href='menu_update.php?id=$id'>
-									<button class='btn btn-warning btn-md'>
-										Edit 
-									</button>
-							  	</a>
-							  	<a href='menu_delete.php?id=$id'>
-									<button class='btn btn-warning btn-md'>
-										Delete 
-									</button>
-							  	</a>
-							</div>";
-					} else {
-						$buttons='';
-					}
+    if(isset($_SESSION['username'])){
+      $filename = "json/searches/" . htmlspecialchars(strtolower($_SESSION['username'])) . "_search.json";
+    } else {
+      $filename = "json/searches/search.json";
+    }
 
-					if($_SESSION['checkout']=='yes'){
-						$cartbtn='';
-						$buttons='';
-					} else {
-						$cartbtn = 
-						  	 "<input class='btn btn-default btn-lg' type='submit' id='$id' name='addtocart' style:'padding-top: 20px; display:block;'
-						  	 	value='Add to Cart' onclick='ajaxPost(this.id);'>
-					  	 	<input type='hidden' id='quantity$id' name='quantity' value=1>
-					  	 	<input type='hidden' id='itemname$id' name='itemname' value='$name'>
-					  	 	<input type='hidden' id='itemprice$id' name='itemprice' value=$price>
-					  	 	";
-					 }			
+    fopen($filename,'a');
+    $string = file_get_contents($filename);
 
-					// Buttons to confirm or cancel Delete
-					$delete_confirmation = 
-						"<form method='post' action=''>
-							<h5>Are you sure you want to delete?</h5>
-							<button class='btn btn-default btn-sm' name='yes'>Yes</button>
-							<button class='btn btn-default btn-sm' name='no'>No</button>
-						</form>";
+    if($string != null) {
+      $array = json_decode($string, true);
+    } 
 
+    switch (sizeof($array)%4) {
+      case 0:
+        $colwidth = "col-lg-3";
+        break;
 
-					// Buttons to confirm or cancel Update
-					$update_confirmation = 
-						"<form method='post' action='' style='background-color: transparent; border: none; color: black; font-size: 0.54em'>
-		    				<div class='form-group'>
-								<input type='text' name='updname' placeholder=$name>
-							</div>
-							<div class='form-group'>
-								<input type='number' min=0 name='updprice' placeholder=$price>
-							</div>	
-							<h5 style='color:white'>Are you sure you want to update?</h5>
-							<br>
-							<button class='btn btn-default btn-sm' name='updyes'>Yes
-							</button>
-							<button class='btn btn-default btn-sm' name='updno'>No
-							</button>
-						</form>";
+      case 1:
+        $colwidth = "col-lg-12";
+        break;
 
-					if ($action=='display') {
-						echo "<div class='itembox clear'>
-						    	$name <br>
-			    				$price <br>
-				    			$buttons
-				    			$cartbtn
-							  </div>";
-					}
+      case 2:
+        $colwidth = "col-lg-6";
+        break;
 
-					if ($action=='additem') {
-						echo "<div class='itembox clear'>
-						    	$name <br>
-			    				$price <br>
-				    			$buttons
-							  </div>";
-					}
+      case 3:
+        $colwidth = "col-lg-4";
+        break;
+      
+      default:
+        $colwidth = "col-lg-12";
+        break;
+    }
 
-					if ($action=='delete') {
-						if ($_GET['id'] == $id) {
-			    			echo "<div class='itembox deletebox clear'>";
-			    		} else {
-			    			echo "<div class='itembox clear'>";
-			    		}
-			    		echo $name . '<br>';
-			    		echo $price . '<br>';
-			    		if ($_GET['id'] == $id) {
-				    		echo $delete_confirmation;
-						} else {
-							echo $buttons;
-						}
-						echo "</div>";
-					}
+    foreach ($array as $key) {
 
-					if ($action=='update') {
-						if ($_GET['id'] == $id) {
-			    			echo "<div class='itembox deletebox clear'>";
-			    		} else {
-			    			echo "<div class='itembox clear'>";
-			    		}
-			    		if ($_GET['id'] == $id) {
-				    		echo $update_confirmation;
-						} else {
-							echo $name . '<br>';
-			    			echo $price . '<br>';
-			    			echo $buttons;
-						}
-						echo "</div>";
-			    	}
-		    	}
-			} else {
-				echo "Menu not yet uploaded for today. <br> 
-				Standby for updates.";
-		}
-	}
+      global $conn;
+
+      $picked='';
+      if(isset($_SESSION['userid'])){
+        $userid = $_SESSION['userid'];
+        $sql = "SELECT * FROM picks 
+            WHERE songid = $key
+            AND userid = $userid
+            AND deleted is null
+            ";
+        $result = mysqli_query($conn,$sql);
+        if(mysqli_num_rows($result) > 0){
+          $picked='yes';
+        }
+      }
+
+      $sql = "SELECT title, artist, year, bpm FROM songs 
+      WHERE id = '$key'
+      ";
+
+      $result = mysqli_query($conn,$sql);
+
+      if(mysqli_num_rows($result) > 0) {
+        while($row = mysqli_fetch_assoc($result)) {
+          extract($row);
+        }
+        echo
+          "<div class='$colwidth song-column'>
+
+            <h4> $title </h4>
+            <h5> $artist </h5>
+            <h5> ($year) </h5>
+          
+            <div class='center songbox'>";
+
+        if($picked=='yes'){
+          echo "
+              <button id='$key' class='btn btn-md btn-default' onclick='songUnpick(this.id);'>
+                <span class='glyphicon glyphicon-star'></span>
+              </button>";
+        } else {
+          echo "
+              <button id='$key' class='btn btn-md btn-default' onclick='songPick(this.id);'>
+                <span class='glyphicon glyphicon-star-empty'></span>
+              </button>";
+        }          
+
+          echo "
+              <button id='$key' class='btn btn-md btn-default' onclick='songPlay(this.id);'>
+              <span class='glyphicon glyphicon-play'></span>
+              </button>";   
+
+          if($_SESSION['role']=='admin'){
+            echo "
+              <button id='$key' class='btn btn-md btn-default' onclick='songDelete(this.id);'>
+                <span class='glyphicon glyphicon-trash'></span>
+              </button>";
+          }
+
+          echo
+            "</div>
+          </div>";
+      } 
+    }
+  }
+
+  function pickShow(){
+
+    global $conn;
+    $array = [];
+
+    if(isset($_SESSION['userid'])) {
+      $userid = $_SESSION['userid'];
+      $sql = "SELECT songid FROM picks 
+              WHERE deleted is null
+              AND userid = $userid 
+              ";
+    } else {
+      $sql = "SELECT songid,count(songid) FROM picks 
+              WHERE deleted is null
+              GROUP BY songid
+              ORDER BY count(songid) DESC LIMIT 8
+              ";
+    }
+    $result = mysqli_query($conn,$sql);
+    if(mysqli_num_rows($result) > 0){
+      while($row = mysqli_fetch_assoc($result)) {
+        extract($row);
+        array_push($array, $songid);
+      }
+    }
+
+    switch (sizeof($array)%4) {
+      case 0:
+        $colwidth = "col-lg-3";
+        break;
+
+      case 1:
+        $colwidth = "col-lg-12";
+        break;
+
+      case 2:
+        $colwidth = "col-lg-6";
+        break;
+
+      case 3:
+        $colwidth = "col-lg-4";
+        break;
+      
+      default:
+        $colwidth = "col-lg-12";
+        break;
+    }
+
+    foreach ($array as $key) {
+
+      global $conn;
+
+      $picked='';
+      if(isset($_SESSION['userid'])){
+        $userid = $_SESSION['userid'];
+        $sql = "SELECT * FROM picks 
+            WHERE songid = $key
+            AND userid = $userid
+            AND deleted is null
+            ";
+        $result = mysqli_query($conn,$sql);
+        if(mysqli_num_rows($result) > 0){
+          $picked='yes';
+        }
+      }
+
+      $sql = "SELECT title, artist, year, bpm FROM songs 
+              WHERE id = '$key'
+              ";
+
+      $result = mysqli_query($conn,$sql);
+
+      if(mysqli_num_rows($result) > 0) {
+        while($row = mysqli_fetch_assoc($result)) {
+          extract($row);
+        }
+        echo
+          "<div class='$colwidth pick-column'>
+
+            <h4> $title </h4>
+            <h5> $artist </h5>
+            <h5> ($year) </h5>
+          
+            <div class='center pickbox'>";
+
+        if($picked=='yes'){
+          echo "
+              <button id='$key' class='btn btn-md btn-default' onclick='songUnpick(this.id);'>
+                <span class='glyphicon glyphicon-star'></span>
+              </button>";
+        } else {
+          echo "
+              <button id='$key' class='btn btn-md btn-default' onclick='songPick(this.id);'>
+                <span class='glyphicon glyphicon-star-empty'></span>
+              </button>";
+        }
+
+        echo "
+              <button id='$key' class='btn btn-md btn-default' onclick='songPlay(this.id);'>
+              <span class='glyphicon glyphicon-play'></span>
+              </button>";             
+
+          if($_SESSION['role']=='admin'){
+            echo "
+              <button id='$key' class='btn btn-md btn-default' onclick='songDelete(this.id);'>
+                <span class='glyphicon glyphicon-trash'></span>
+              </button>";
+          }
+
+          echo
+            "</div>
+          </div>";
+      } 
+    }
+  }
 ?>

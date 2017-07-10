@@ -72,7 +72,7 @@
 	// 			,'A        Bm      G'
 	// 			,'D      A      D C#m7Ab G#'];
 
-	function convertChords(){
+	function convertChords($size){
 		if(isset($_POST['convert'])) {
 
 			$chords=[];
@@ -88,9 +88,8 @@
 			}
 			$chordlist=array_unique($chordlist);
 			
-			$filename = 'json/tabs.json';
-
 			// Check if file exists
+			$filename = 'json/tabs.json';
 			fopen($filename,'a');
 			$string = file_get_contents($filename);
 
@@ -106,7 +105,51 @@
 				if(isset($tabs[$chord])){
 					$pos = substr($tabs[$chord],0,1)	;
 					$tab = substr($tabs[$chord],1,4)	;
-					echo "<uke-chord frets='$tab' size='L'  position=$pos name='$chord'  style='background: white; padding-right: 20px; margin: 10px;'></uke-chord>";
+					echo "<uke-chord class='ukechord' frets='$tab' ";
+					if($size=='large'){
+						echo "size='L' ";
+					}
+					echo "position=$pos name='$chord'></uke-chord>";
+				}
+			}
+		}
+	};
+
+	function showChords($size,$chords){
+		if(isset($_GET['id'])) {
+			
+			$chordlist=[];
+			for($i=0; $i<sizeof($chords) ;$i++) {
+				$chordtemp = preg_split('/\s+/',$chords[$i]);
+
+				for($j=0; $j<sizeof($chordtemp); $j++) {
+					array_push($chordlist,ucfirst($chordtemp[$j]));
+				} 
+			}
+			$chordlist=array_unique($chordlist);
+			
+			// Check if file exists
+			$filename = 'json/tabs.json';
+			fopen($filename,'a');
+			$string = file_get_contents($filename);
+
+			if($string != null) {
+				$tabs = json_decode($string, true);
+			} else {
+				$fp = fopen($filename,'w');
+				fwrite($fp, json_encode($tabs,JSON_PRETTY_PRINT));
+				fclose($fp);
+			}
+
+			foreach($chordlist as $chord) {
+				if(isset($tabs[$chord])){
+					$pos = substr($tabs[$chord],0,1)	;
+					$tab = substr($tabs[$chord],1,4)	;
+					echo "<uke-chord class='ukechord' frets='$tab' ";
+					if($size=='large'){
+						echo "size='L' ";
+					}
+					echo "position=$pos name='$chord'></uke-chord>";
 				}
 			}
 		}

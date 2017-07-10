@@ -4,10 +4,7 @@
 <?php require_once "phpfun/acctSignup.php"; ?>
 <?php require_once "phpfun/acctLogout.php" ?>
 <?php require_once "phpfun/acctUpdate.php" ?>
-<?php require_once "phpfun/songAdd.php" ?>
-<?php require_once "phpfun/songDelete.php" ?>
 <?php require_once "phpfun/songShow.php"; ?>
-<?php require_once "phpfun/songUpdate.php" ?>
 <?php require_once "phpfun/ukeTabs.php" ?>
 
 <!DOCTYPE html>
@@ -57,20 +54,30 @@
 	  			if($_SESSION['role']=='admin') {
 	  				if($title=='Home page') {
 		  				echo '<li>
-						          <a  id="js-signup" href="song_add.php" class="text-right">
-							         <span class="glyphicon glyphicon-plus-sign"></span> 
-							         Add Song 
+						          <a  id="user-action" href="song_add.php" class="text-right">
+							         <span class="glyphicon glyphicon-music"></span> 
+							         Update Songs 
 						          </a>
 					         </li>';
 	  				} else {
 	  					echo '<li>
-						          <a  id="js-signup" href="index.php" class="text-right">
+						          <a  id="user-action" href="index.php" class="text-right">
 							         <span class="glyphicon glyphicon-home"></span> 
 							         Home
 						          </a>
 					         </li>';
 	  				}
 	          	}
+
+	          	// Display user picks in home page instead
+	  			// if($_SESSION['role']>'') {
+	          		// echo '<li>
+					        //   <a  id="user-action" href="index.php" class="text-right">
+						       //   <span class="glyphicon glyphicon-star"></span> 
+						       //   My Picks
+					        //   </a>
+				         // </li>';
+	          	// } 	          	
 	  		?>
   		
 	    	<li>

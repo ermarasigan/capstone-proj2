@@ -82,7 +82,12 @@ $(function() {
         distance: '0px'
     }, 300);
     sr.reveal('.song-column', {
-        duration: 600,
+        duration: 300,
+        scale: 0.3,
+        distance: '0px'
+    }, 300);
+    sr.reveal('.pick-column', {
+        duration: 300,
         scale: 0.3,
         distance: '0px'
     }, 300);

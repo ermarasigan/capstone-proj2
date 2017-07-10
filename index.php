@@ -27,7 +27,7 @@
           ?>
         </h2>
         <form id="searchform" method="POST" action="">
-          <input id="search" type="text" name="find" placeholder="Type title or artist" >
+          <input id="search" type="text" name="find" placeholder="Title or artist" >
           <a id="searchbtn" class="btn btn-default btn-lg page-scroll" href="#">
             Find
           </a>
@@ -41,52 +41,39 @@
 <section id="about" class="about-section">
   <div class="container">
     <div class="row">
-      <?php 
-          $filename = "json/search.json";
-          fopen($filename,'a');
-          $string = file_get_contents($filename);
-
-          if($string != null) {
-            $array = json_decode($string, true);
-          } 
-
-          // if (sizeof($array)==0){
-          //   showPicks();
-          // }
-
-          // var_dump(sizeof($array));
-          switch (sizeof($array)%4) {
-            case 0:
-              $colwidth = "col-lg-3";
-              break;
-
-            case 1:
-              $colwidth = "col-lg-12";
-              break;
-
-            case 2:
-              $colwidth = "col-lg-6";
-              break;
-
-            case 3:
-              $colwidth = "col-lg-4";
-              break;
-            
-            default:
-              $colwidth = "col-lg-12";
-              break;
+      <h2>
+        <?php 
+          if(isset($_SESSION['username'])){
+            echo $_SESSION['username'] . " searched for";
+          } else {
+            echo "Recent Searches";
           }
-
-        foreach ($array as $key) {
-          echo
-          "<div class='$colwidth song-column' >
-            <div class='center' style='background: blue; margin: 40px auto; width: 20%; height: 50px;'>
-              $key $colwidth
-            </div>
-          </div>";
-        }
+        ?>
+      </h2>
+    </div>
+    <div class="row">
+      <?php 
+          searchShow();
       ?>
-      
+    </div>
+    <div class="row">
+      <h2> <br> </h2>
+    </div>
+    <div class="row">
+      <h2>
+        <?php 
+          if(isset($_SESSION['username'])){
+            echo $_SESSION['username'] . "'s Picks";
+          } else {
+            echo "Users' Top Picks";
+          }
+        ?>
+      </h2>
+    </div>
+    <div class="row">
+      <?php 
+          pickShow();
+      ?>
     </div>
   </div>
 </section>

@@ -3,7 +3,7 @@
 
   function get_title() {
   	global $title;
-  	$title='Add song (admin only)';
+  	$title='Add song';
   	echo $title;
   }
 ?>
@@ -12,53 +12,23 @@
 <?php require_once "partials/_header.php"; ?>
 
 <!-- Main Section -->
-<!-- <main class="container-fluid" id="welcomebox">
+<main class="container" id="addsongbg">
 	<div class="row">
-		<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-			<h1> Everyone loves to eat </h1>
-			<?php 
-				if (isset($_SESSION['username'])){
-					showmenu('additem');
-				} 
-			?>
-		</div>
-		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-			<br>
+		<h2 class="text-center">
 			<?php 
 				if(!isset($_SESSION['role'])){
 					$_SESSION['role']='';
 				}
-
-				if($_SESSION['role']=='admin'){
-				echo '
-					<form method="post" action="">
-						<div class="form-group">
-							<label for="name">Item name:</label>
-							<input type="text" name="name" id="name">
-						</div>
-						<div class="form-group">
-						 	<label for="price">Item price:</label>
-							<input type="number" min=0 name="price" id="price">
-						</div>
-						<button name="additem" class="btn btn-info">Add Item</button>
-						<button name="cancel" class="btn btn-warning">Cancel</button>
-					</form>
-					';
+				if ($_SESSION['role']=='admin') {
+					echo "Add/Update Song";
+				} else {
+					echo "Preview Song";
 				}
 			?>
-		</div>
+		</h2>
 	</div>
-</main>
- -->
-<!-- Main Section -->
-<main class="container" id="addsongbg">
+
 	<div class="row">
-
-		<h2 class="text-center">Add Song</h2>
-	</div>
-	<div class="row">
-
-
 		<div class="col-md-4 col-lg-4">
 			<div class="form-group">
               <input type="text" class="form-control" id="songtitle" name="songtitle" placeholder="Song Title">
@@ -77,40 +47,33 @@
             </div>
          </div>
 
-
-		<!-- <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8"> -->
 		<div class="col-md-6 col-lg-6">
-			<textarea id="textarea" rows="8" cols="30" placeholder="Type chords and lyrics in alternate lines" required="required"></textarea>
+			<textarea id="textarea" rows="8" cols="30" placeholder="Type chords and lyrics in alternate lines. Preview partially by selecting lines." required="required"></textarea>
 		</div>
-		
-
-
 		
 		<div class="col-md-2 col-lg-2 text-center">
-			<button type="button" class='btn btn-default btn-info' onclick="previewLyrics()">Preview</button>
-			<button id='togglebtn' class='btn btn-default btn-default' type='submit' onclick='toggleLyrics();'>Play</button>
-			<button id='savebtn' class='btn btn-default btn-success' type='submit' onclick='saveSong();'>Save</button>
-			<button id='stopbtn' class='btn btn-default btn-default' type='submit' onclick='stopSong();'>Stop</button>
+			<button id="previewbtn" type="button" class='btn btn-default btn-info' 
+					onclick="previewLyrics()">Preview</button>
+			<button id='togglebtn' class='btn btn-default btn-default' type='submit' 
+					onclick='toggleLyrics();'>Play</button>
+			<?php 
+				if ($_SESSION['role']=='admin') {
+					echo "
+					<button id='savebtn' class='btn btn-default btn-success' type='submit' 
+							onclick='saveSong();'>Save</button>";
+				}
+			?>
+			<button id='stopbtn' class='btn btn-default btn-default' type='submit' 
+					onclick='stopSong();'>Stop</button>
 		</div>
-			
-
-		<!-- <uke-chord frets='0020' size='L'  position=0 name='A'  style='background: white; padding-right: 20px; margin: 10px;'></uke-chord> -->
 	</div>
-	<!-- <div class="row">
-		<div class="col-lg-12" id="canvas-container">
-			<canvas id="draw-pad" width="700" height="200">
-			</canvas>
-		</div>
-	</div> -->
+
 	<canvas id="draw-pad" width="700" height="120">
 	</canvas>
 </main>
 
-<!-- About Section -->
-<section id="about" class="about-section">
-
-		
-
+<!-- Chord Section -->
+<section id="chordlookup" class="about-section">
   <div class="container">
     <div class="row">
     	<div class="text-center">
@@ -118,7 +81,7 @@
     	</div>
     	<br>
     	<div class="col-lg-6 col-lg-offset-3">
-		    <form action="#about" method="post">
+		    <form action="#chordlookup" method="post">
 				<input id="searchtabs" type="text" name="chord" placeholder="Type chords separated by spaces">
 				<button type="submit" class="btn btn-default btn-lg" name="convert">
 					Get chord tabs
@@ -129,7 +92,7 @@
 	<div class="row">
 		<br>
 		<?php 
-			convertChords()
+			convertChords('large')
 		?>
 	</div>
   </div>
