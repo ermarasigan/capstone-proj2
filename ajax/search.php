@@ -28,20 +28,20 @@
     		while(mysqli_stmt_fetch($stmt)) {
     			array_push($array, $id);
     		}
+
+            // Write to json file
+            $filename = "../json/search.json";
+            if(isset($_SESSION['username'])){
+              $filename = "../json/searches/" . htmlspecialchars(strtolower($_SESSION['username'])) . "_search.json";
+            } else {
+              $filename = "../json/searches/search.json";
+            }
+
+            $fp = fopen($filename,'w');
+            fwrite($fp, json_encode($array,JSON_PRETTY_PRINT));
+            fclose($fp);
     	}
     	mysqli_stmt_close($stmt);
     }
     echo json_encode($array);
-
-    // Write to json file
-    $filename = "../json/search.json";
-    if(isset($_SESSION['username'])){
-      $filename = "../json/searches/" . htmlspecialchars(strtolower($_SESSION['username'])) . "_search.json";
-    } else {
-      $filename = "../json/searches/search.json";
-    }
-
-    $fp = fopen($filename,'w');
-    fwrite($fp, json_encode($array,JSON_PRETTY_PRINT));
-    fclose($fp);
 ?>
