@@ -30,6 +30,9 @@
 	<script src="dist/webcomponents-lite.min.js"></script>
 	<link rel="import" href="dist/uke-chord.html">
 
+	<!-- icon on browser -->
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">   
+
 </head>
 <body>
 
@@ -69,15 +72,14 @@
 	  				}
 	          	}
 
-	          	// Display user picks in home page instead
-	  			// if($_SESSION['role']>'') {
-	          		// echo '<li>
-					        //   <a  id="user-action" href="index.php" class="text-right">
-						       //   <span class="glyphicon glyphicon-star"></span> 
-						       //   My Picks
-					        //   </a>
-				         // </li>';
-	          	// } 	          	
+	  			if($_SESSION['role']>'' && $title == 'Home page') {
+	          		echo '<li>
+					          <a  id="user-action" href="#about" class="text-right">
+						         <span class="glyphicon glyphicon-star"></span> 
+						         My Picks
+					          </a>
+				         </li>';
+	          	} 	          	
 	  		?>
   		
 	    	<li>
