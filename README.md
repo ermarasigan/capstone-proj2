@@ -1,3 +1,2 @@
 # Karauke
-## An online companion for ukulele players 
-### with karaoke-style lyrics and dynamically generated chord tabs
+### An online companion for ukulele players with karaoke lyrics and dynamic chord tabs
